@@ -5,8 +5,6 @@ StreetWork'in is a platform that will aim to organize events around street worko
 [![Next.js](https://img.shields.io/badge/Next.js-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Sass](https://img.shields.io/badge/Sass-CC6699?logo=sass&logoColor=white)](https://sass-lang.com)
-[![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org)
 
 ## Stack and versions
 
@@ -21,19 +19,12 @@ The frontend versions below come from `streetworkin-frontend/package.json`. The 
 | Web | Fonts | `next/font/google` (Anton, `display: swap`) |
 | Web | Images | `next/image` (Next 16 — `preload` instead of deprecated `priority`) |
 | Backend | **Node.js** | >= 20 (aligned with the frontend requirement) |
-| Backend | **NestJS** | ^11.x |
 | Backend | **TypeScript** | ~5.7.x |
-| Backend | **PostgreSQL** | 16 (LTS) |
-| Backend | ORM | Prisma ^6.x |
-| Backend | Validation | class-validator + class-transformer (or Zod via a Nest pipe) |
-| Backend | Auth | Passport + `@nestjs/jwt` |
-| Backend | API docs | `@nestjs/swagger` (OpenAPI) |
+
 
 ## Prerequisites
 
 - **Node.js** `>= 20.9` — required by Next.js 16 on the frontend and recommended for the NestJS backend.
-- **PostgreSQL** 16 instance reachable locally (Docker is fine), once the backend workspace lands.
-- A modern browser (Chrome/Edge/Safari/Firefox) — the project relies on `backdrop-filter` and `100dvh`, both Baseline-available.
 
 ## Run locally
 
@@ -86,26 +77,3 @@ Main frontend rules:
 - Images go through `next/image`; above-the-fold logos use `loading="eager"` (Next 16 deprecates `priority`).
 - Background video can be **blurred** (e.g. `/streetworkin`, `/login`, `/register`) or **paused** on a per-route basis via `BLURRED_VIDEO_ROUTES` / `HIDDEN_VIDEO_ROUTES` in `site-media.ts` — paused routes call `video.pause()` via a `useEffect`, not just visually hidden.
 
-### Backend detailed (planned)
-
-The backend (`streetworkin-backend`) will be organized by business domain, with explicit boundaries between transport, business logic, and persistence:
-
-- `src/modules/<domain>/`: route handlers (controllers), business services, repositories, DTOs, and Zod / class-validator schemas. Likely domains: `auth`, `users`, `profiles`, `events`, `subscriptions`.
-- `src/prisma/`: Prisma client provider + a NestJS module exposing it to the rest of the app.
-- `src/common/`: cross-cutting concerns — global exception filter, response envelope interceptor, custom decorators, guards (JWT, roles), pipes.
-- `src/config/`: typed runtime configuration validated at startup (database URL, JWT secret, CORS origins, etc.).
-- `prisma/`: schema (`schema.prisma`) + versioned `migrations/`.
-
-Typical request flow:
-
-```
-route -> ValidationPipe (DTO) -> Guard (auth/roles) -> Controller -> Service -> Repository (Prisma) -> Response envelope
-```
-
-Main backend rules:
-
-- Keep transport concerns in controllers, business rules in services, persistence in repositories — controllers never touch Prisma directly.
-- Return consistent API envelopes (`{ data }` / `{ error }`) for frontend compatibility.
-- Validate input early via DTOs before business code runs.
-- Centralize error translation in a global exception filter — never leak Prisma errors or stack traces to clients.
-- Treat `prisma/schema.prisma` as the schema source of truth; every change goes through `prisma migrate dev` and lands as a migration file in version control.
