@@ -13,7 +13,10 @@ test.describe("Register page — pricing tiers and inscription tunnel", function
   });
 
   test("the Classic formula card should display 175€ as its price", async function ({ page }) {
-    await expect(page.getByText("175€")).toBeVisible();
+    // The price 175€ appears in two places on the page (the tiers section AND the
+    // checkout options). We scope the lookup to the `#tiers` section so the locator
+    // matches exactly one element (Playwright's strict mode requirement).
+    await expect(page.locator("#tiers").getByText("175€")).toBeVisible();
   });
 
   test("the 'Finalise ton adhésion' section should display the checkout panel", async function ({ page }) {
