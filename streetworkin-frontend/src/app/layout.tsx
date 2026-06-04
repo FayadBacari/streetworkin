@@ -42,11 +42,20 @@ export const metadata: Metadata = {
 // It mounts the background video once for the whole site and wraps every page with the footer.
 // NOTE: Next.js requires the prop key to be named `children` — we rename it locally to a
 // longer descriptive name using the JavaScript destructuring "rename" syntax (`children: ...`).
+// `data-scroll-behavior="smooth"` (set on the <html> element below) tells Next.js to
+// keep the smooth scroll for user-initiated anchor clicks (e.g. clicking "Le directoire"
+// in the header to jump to #team), BUT to disable it during route transitions so that
+// navigating between pages does not look janky.
+// (Pairs with the `scroll-behavior: smooth` rule defined inside globals.scss.)
 export default function RootLayout({
   children: childrenOfTheRootLayout,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" className={antonGoogleFontConfiguration.variable}>
+    <html
+      lang="fr"
+      className={antonGoogleFontConfiguration.variable}
+      data-scroll-behavior="smooth"
+    >
       <body>
         <div className="site-shell">
           <SiteVideoBackground />
