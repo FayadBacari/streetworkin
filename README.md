@@ -75,5 +75,5 @@ Main frontend rules:
 - SCSS uses **BEM** consistently and **never** hardcodes a value that exists in `_variables.scss` (colors, shadows, radii, breakpoints, font stack).
 - Responsive breakpoints go through `@include tablet` / `@include mobile` — never raw `@media (max-width: …)`.
 - Images go through `next/image`; above-the-fold logos use `loading="eager"` (Next 16 deprecates `priority`).
-- Background video can be **blurred** (e.g. `/streetworkin`, `/login`, `/register`) or **paused** on a per-route basis via `BLURRED_VIDEO_ROUTES` / `HIDDEN_VIDEO_ROUTES` in `site-media.ts` — paused routes call `video.pause()` via a `useEffect`, not just visually hidden.
+- Background video can be **blurred** (e.g. `/streetworkin`, `/login`, `/register`) or **paused** on a per-route basis via `BLURRED_VIDEO_ROUTES` / `HIDDEN_VIDEO_ROUTES` in `site-media.ts` — paused routes call `video.pause()` via a `useEffect`, not just visually hidden yet.
 
