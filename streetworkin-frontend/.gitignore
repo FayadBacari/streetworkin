@@ -13,6 +13,12 @@
 # testing
 /coverage
 
+# playwright (E2E test runtime artefacts: video, screenshots, traces)
+/playwright-report
+/test-results
+/blob-report
+/playwright/.cache
+
 # next.js
 /.next/
 /out/

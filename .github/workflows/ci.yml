@@ -1,55 +1,141 @@
-name: CI — vérifications des versions
+# Pipeline d'intégration continue (CI) pour StreetWork'in.
+#
+# Ce workflow s'exécute automatiquement :
+#   - À chaque Pull Request ciblant les branches `main` ou `develop`
+#   - À chaque push direct sur `main` ou `develop` (pour garder le badge à jour)
+#
+# Trois jobs s'exécutent EN PARALLÈLE pour gagner du temps :
+#
+#   1. unit-and-integration-tests
+#         → installe les deps
+#         → vérifie le TypeScript (npx tsc --noEmit)
+#         → fait passer la suite Vitest (tests unitaires + intégration jsdom)
+#
+#   2. production-build
+#         → installe les deps
+#         → fait le build de production Next.js (catch SCSS errors, imports cassés…)
+#
+#   3. e2e-tests
+#         → installe les deps + le navigateur Playwright (Chromium)
+#         → fait le build de production puis lance Playwright contre le serveur démarré
+#         → catch les régressions de parcours utilisateur (clics, navigation…)
+#
+# Si UN seul job tombe en rouge, la PR ne peut pas être mergée
+# (à condition d'avoir activé "Require status checks to pass" côté branch rules).
+
+name: CI — tests, build & E2E
 
 on:
   push:
-    branches: [main, master]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [main, master]
+    branches:
+      - main
+      - develop
 
+# Si un nouveau run démarre sur la même branche pendant qu'un autre tourne,
+# on annule l'ancien pour ne pas gaspiller des minutes CI.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  versions:
-    name: Runtime Node.js / npm
+  # ─── Job 1 : tests unitaires + intégration jsdom (Vitest) ─────────────
+  unit-and-integration-tests:
+    name: Unit & integration tests (Vitest)
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: streetworkin-frontend
 
     steps:
       - name: Checkout du dépôt
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Installer Node.js (LTS 22)
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: "npm"
+          cache-dependency-path: streetworkin-frontend/package-lock.json
 
-      - name: Afficher les versions
-        run: |
-          set -euo pipefail
-          echo "Node.js: $(node --version)"
-          echo "npm: $(npm --version)"
+      - name: Installer les dépendances
+        run: npm ci
 
-      - name: Vérifier Node.js >= 20
-        run: |
-          node <<'EOF'
-          const major = Number(process.version.slice(1).split(".")[0]);
-          if (Number.isNaN(major) || major < 20) {
-            console.error("Node.js 20 ou supérieur est requis, version actuelle:", process.version);
-            process.exit(1);
-          }
-          console.log("OK — Node.js", process.version);
-          EOF
+      - name: Vérification TypeScript
+        run: npx tsc --noEmit
 
-      - name: Vérifier npm >= 10
-        run: |
-          node <<'EOF'
-          const { execSync } = require("node:child_process");
-          const raw = execSync("npm --version", { encoding: "utf8" }).trim();
-          const major = Number(raw.split(".")[0]);
-          if (Number.isNaN(major) || major < 10) {
-            console.error("npm 10 ou supérieur est requis, version actuelle:", raw);
-            process.exit(1);
-          }
-          console.log("OK — npm", raw);
-          EOF
+      - name: Vitest (tests unitaires + intégration)
+        run: npm test
+
+
+  # ─── Job 2 : build de production Next.js ──────────────────────────────
+  production-build:
+    name: Next.js production build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: streetworkin-frontend
+
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js (LTS 22)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: streetworkin-frontend/package-lock.json
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Build de production Next.js
+        run: npm run build
+
+
+  # ─── Job 3 : tests End-to-End Playwright (vrai navigateur Chromium) ───
+  e2e-tests:
+    name: End-to-End tests (Playwright)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: streetworkin-frontend
+
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js (LTS 22)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: streetworkin-frontend/package-lock.json
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Installer le navigateur Chromium pour Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Playwright (tests End-to-End)
+        # Playwright config démarre lui-même le serveur Next.js production
+        # (`npm run build && npm run start`) avant de lancer les tests.
+        run: npm run test:e2e
+
+      # Si les E2E échouent on garde le rapport HTML pour pouvoir le télécharger
+      # et debugguer depuis l'UI GitHub Actions.
+      - name: Uploader le rapport Playwright en cas d'échec
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: streetworkin-frontend/playwright-report/
+          retention-days: 14
