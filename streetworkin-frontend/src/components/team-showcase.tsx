@@ -52,20 +52,21 @@ const LIST_OF_TEAM_SUBSECTIONS: OneTeamSubsection[] = [
     optionalShortDescriptionLine:
       "Découvrez l'équipe qui porte la vision et les valeurs de StreetWork'in au quotidien.",
     listOfMembersInsideSubsection: [
-      { memberFullName: "Marc Yeurc'h", memberRoleLabel: "Trésorier", optionalProfilePhotoPath: "/assets/fondateur_1.jpg" },
-      { memberFullName: "Maxime Ait-Chadi", memberRoleLabel: "Président", optionalProfilePhotoPath: "/assets/fondateur_2.jpg" },
-      { memberFullName: "Alice Couque-Castelnovo", memberRoleLabel: "Secrétaire", optionalProfilePhotoPath: "/assets/fondateur_3.jpg" },
+      { memberFullName: "Franck-Yann Nseth", memberRoleLabel: "Fondateur", optionalProfilePhotoPath: "/assets/fondateur_1.jpg" },
+      { memberFullName: "Thomas CHAUSSIN", memberRoleLabel: "Fondateur", optionalProfilePhotoPath: "/assets/fondateur_2.jpg" },
+      { memberFullName: "Enzo HERTZ", memberRoleLabel: "Fondateur", optionalProfilePhotoPath: "/assets/fondateur_3.jpg" },
     ],
   },
+  // NOTE: photo order follows member order. If a photo doesn't match the right
+  // staff member, simply swap the _1/_2/_3/_4 suffix in the photo path below.
   {
     headingFirstPart: "Le",
     headingSecondPartInAccentColor: "staff",
     listOfMembersInsideSubsection: [
-      { memberFullName: "Chloé Rossignol", memberRoleLabel: "Responsable Pôle Partenariats et Sponsoring" },
-      { memberFullName: "Johan Sanon", memberRoleLabel: "Responsable Pôle Sportif" },
-      { memberFullName: "Loïc Kuentz", memberRoleLabel: "Responsable Pôle Événementiel" },
-      { memberFullName: "Mathieu Ardoin", memberRoleLabel: "Responsable Pôle Technologique" },
-      { memberFullName: "Marc Yeurc'h", memberRoleLabel: "Responsable Pôle Communication" },
+      { memberFullName: "Kendji", memberRoleLabel: "Responsable Commercial", optionalProfilePhotoPath: "/assets/staff_1.jpg" },
+      { memberFullName: "Victor", memberRoleLabel: "Commercial", optionalProfilePhotoPath: "/assets/staff_2.jpg" },
+      { memberFullName: "Mathilde", memberRoleLabel: "Masseuse sportive", optionalProfilePhotoPath: "/assets/staff_3.jpg" },
+      { memberFullName: "selene", memberRoleLabel: "Nutritionniste", optionalProfilePhotoPath: "/assets/staff_4.jpg" },
     ],
   },
   // TODO: replace placeholder ambassador names ("Prénom Nom N") with the real names.
@@ -74,16 +75,16 @@ const LIST_OF_TEAM_SUBSECTIONS: OneTeamSubsection[] = [
     headingFirstPart: "Nos",
     headingSecondPartInAccentColor: "ambassadeurs",
     listOfMembersInsideSubsection: [
-      { memberFullName: "Prénom Nom 1", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_1.jpg" },
-      { memberFullName: "Prénom Nom 2", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_2.jpg" },
-      { memberFullName: "Prénom Nom 3", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_3.jpg" },
-      { memberFullName: "Prénom Nom 4", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_4.jpg" },
-      { memberFullName: "Prénom Nom 5", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_5.jpg" },
-      { memberFullName: "Prénom Nom 10", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_10.jpg" },
-      { memberFullName: "Prénom Nom 7", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_7.jpg" },
-      { memberFullName: "Prénom Nom 8", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_8.jpg" },
-      { memberFullName: "Prénom Nom 9", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_9.jpg" },
-      { memberFullName: "Prénom Nom 6", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_6.jpg" },
+      { memberFullName: "Virgile", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_1.jpg" },
+      { memberFullName: "Jawara", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_2.jpg" },
+      { memberFullName: "Axelle", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_3.jpg" },
+      { memberFullName: "Alban", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_4.jpg" },
+      { memberFullName: "Clément", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_5.jpg" },
+      { memberFullName: "Clement.F", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_10.jpg" },
+      { memberFullName: "Luna", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_7.jpg" },
+      { memberFullName: "Margaux", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_8.jpg" },
+      { memberFullName: "Nell", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_9.jpg" },
+      { memberFullName: "Solal", memberRoleLabel: "Ambassadeur", optionalProfilePhotoPath: "/assets/ambassadeur_6.jpg" },
     ],
   },
 ];
